@@ -29,10 +29,9 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-# If you change this, make sure you run ...
+# If you change INSTALLED_APPS, make sure you run ...
 # python manage.py makemigrations
 # python manage.py migrate
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,7 +57,10 @@ ROOT_URLCONF = 'try_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # Update template directory
+        'DIRS': [
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
