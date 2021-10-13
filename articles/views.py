@@ -7,7 +7,7 @@ def article_search_view(request):
     """
     Render article search view
     @param request:
-    @return:
+    @return: Render search.html
     """
 
     # Get the input dictionary
@@ -31,6 +31,30 @@ def article_search_view(request):
     }
 
     return render(request, "articles/search.html", context=context)
+
+
+def article_create_view(request):
+    """
+    Render create article
+    @param request: Django's request
+    @return: Render create.html
+    """
+
+    context = {}
+
+    # Get the POST input
+    if request.method == "POST":
+        post_dict = request.POST
+        title = post_dict.get('title')
+        content = post_dict.get('content')
+
+        # Create article object
+        article_obj = Article.objects.create(title=title, content=content)
+
+        context['object'] = article_obj
+        context['created'] = True
+
+    return render(request, "articles/create.html", context=context)
 
 
 def article_detail_view(request, id=None):
