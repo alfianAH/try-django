@@ -35,4 +35,5 @@ urlpatterns = [
     path('articles/<int:id>/', article_detail_view),
     path('admin/', admin.site.urls),
     path('login/', login_view),
+    path('logout/', logout_view),
 ]
