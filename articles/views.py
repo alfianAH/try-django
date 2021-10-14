@@ -17,7 +17,7 @@ def article_search_view(request):
     try:
         # Search by id
         query = int(query_dict.get("q"))
-    except ValueError:
+    except:
         query = None
 
     article_obj = None
