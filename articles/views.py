@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from .forms import ArticleForm
 from .models import Article
 
 
@@ -41,13 +42,19 @@ def article_create_view(request):
     @return: Render create.html
     """
 
-    context = {}
+    # Check if there is the request.POST,
+    # else it is None, and make the form is not valid
+    form = ArticleForm(request.POST or None)
 
-    # Get the POST input
-    if request.method == "POST":
-        post_dict = request.POST
-        title = post_dict.get('title')
-        content = post_dict.get('content')
+    context = {
+        "form": form,
+    }
+
+    # If the form is valid, ...
+    if form.is_valid():
+        # Take the cleaned data
+        title = form.cleaned_data.get("title")
+        content = form.cleaned_data.get("content")
 
         # Create article object
         article_obj = Article.objects.create(title=title, content=content)
