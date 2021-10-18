@@ -1,5 +1,5 @@
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 
 
@@ -9,24 +9,16 @@ def login_view(request):
     @param request:
     @return:
     """
+    form = AuthenticationForm(request, data=request.POST or None)
 
-    context = {}
-
-    if request.method == "POST":
-        post_dict = request.POST
-
-        # Get input form
-        username = post_dict.get("username")
-        password = post_dict.get("password")
-
-        user = authenticate(request, username=username, password=password)
-
-        if user is None:
-            context["error"] = "Invalid username or password"
-            return render(request, "accounts/login.html", context=context)
-
-        login(request, user)
+    if form.is_valid():
+        login(request, form.get_user())
         return redirect('/')
+
+    context = {
+        "form": form
+    }
+
     return render(request, "accounts/login.html", context=context)
 
 
