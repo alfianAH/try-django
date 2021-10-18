@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 
 
@@ -52,5 +53,15 @@ def register_view(request):
     @return:
     """
 
-    context = {}
+    # Check if there is the request.POST,
+    # else it is None, and make the form is not valid
+    form = UserCreationForm(request.POST or None)
+
+    if form.is_valid():
+        user_obj = form.save()
+        return redirect('/login')
+
+    context = {
+        "form": form,
+    }
     return render(request, "accounts/register.html", context=context)
