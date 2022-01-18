@@ -9,6 +9,7 @@ from articles.models import Article
 
 
 def home_view(request):
+    "'"
     """
     Make home view
     @param request: Django's request
