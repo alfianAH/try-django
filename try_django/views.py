@@ -30,6 +30,6 @@ def home_view(request):
     # template = get_template(html_fn)
     # template_str = template.render(context=context)
 
-    html_string = render_to_string(html_fn, context=context)
+    html_string = render_to_string(html_fn, context=context, request=request)
 
     return HttpResponse(html_string)

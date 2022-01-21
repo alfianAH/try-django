@@ -63,18 +63,18 @@ def article_create_view(request):
     return render(request, "articles/create.html", context=context)
 
 
-def article_detail_view(request, id=None):
+def article_detail_view(request, slug=None):
     """
     Render article's detail
     @param request: Django's request
-    @param id: Article's ID
+    @param slug: Article's slug
     @return: Returns detail.html as a response
     """
 
     article_obj = None
 
-    if id is not None:
-        article_obj = Article.objects.get(id=id)
+    if slug is not None:
+        article_obj = Article.objects.get(slug=slug)
 
     context = {
         "object": article_obj
