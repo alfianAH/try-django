@@ -18,7 +18,7 @@ def slugify_instance_title(instance, save=False, new_slug=None):
 
     if query.exists():
         # Randomize int to prevent bad slug
-        random_int = random.randint(300_000, 500_000)
+        random_int = random.randint(100_000, 25_000_000)
         # Auto generate new slug
         slug = '{}-{}'.format(slug, random_int)
 

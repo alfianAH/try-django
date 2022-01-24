@@ -10,7 +10,7 @@ class ArticleTestCase(TestCase):
         """
         Setup article database for testing
         """
-        self.number_of_articles = 5
+        self.number_of_articles = 500
         for i in range(self.number_of_articles):
             Article.objects.create(title='Hello world', content='Hello')
     
@@ -55,12 +55,29 @@ class ArticleTestCase(TestCase):
 
     
     def test_slugify_instance_title(self):
+        """
+        Test slugify instance title uniqueness
+        """
+        # Get the last article
         obj = Article.objects.all().last()
         new_slugs = []
 
-        for i in range(0, 5):
+        # Slugify the last article for 25 times
+        for i in range(0, 25):
             instance = slugify_instance_title(obj, save=False)
             new_slugs.append(instance.slug)
 
+        # Remove the same slug by make it to set
         unique_slugs = list(set(new_slugs))
         self.assertEqual(len(new_slugs), len(unique_slugs))
+
+    
+    def test_slugify_instance_title_redux(self):
+        """
+        Test slugify instance title uniqueness
+        """
+        # Get slug list
+        slug_list = Article.objects.all().values_list('slug', flat=True)
+        # Remove the same slug by make it to set
+        unique_slug_list = list(set(slug_list))
+        self.assertEqual(len(slug_list), len(unique_slug_list))
