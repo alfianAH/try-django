@@ -16,9 +16,9 @@ class ArticleModelForm(forms.ModelForm):
         qs = Article.objects.filter(title__icontains=title)
 
         # If the query has results, ...
-        if qs.exists():
+        # if qs.exists():
             # Print the error
-            self.add_error("title", "\"{}\" is already in use".format(title))
+            # self.add_error("title", "\"{}\" is already in use".format(title))
 
         return data
 

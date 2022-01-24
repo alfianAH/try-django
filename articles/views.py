@@ -1,5 +1,5 @@
 from signal import raise_signal
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from .forms import ArticleForm, ArticleModelForm
@@ -61,6 +61,9 @@ def article_create_view(request):
         context['form'] = ArticleModelForm()
         # context['object'] = article_obj
         # context['created'] = True
+
+        # Redirect to article detail
+        return redirect(article_obj.get_absolute_url())
 
     return render(request, "articles/create.html", context=context)
 

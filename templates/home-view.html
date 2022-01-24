@@ -2,11 +2,14 @@
 
 {% block content %}
 
+<a href="{% url 'article-create' %}">Create article</a>
+<a href="{% url 'article-detail' slug='hello-world' %}">Highlight hello world</a>
+
 <p>Article list</p>
 <ul>
     {% for article in object_list %}
         <li>
-            <a href="/articles/{{ article.slug }}/">{{ article.title }} - {{ article.content }}</a>
+            <a href="{{ article.get_absolute_url }}">{{ article.title }} - {{ article.content }}</a>
         </li>
     {% endfor %}
 </ul>
