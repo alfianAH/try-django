@@ -2,6 +2,7 @@ from turtle import title
 from django.test import TestCase
 from django.utils.text import slugify
 from .models import Article
+from .utils import slugify_instance_title
 
 # Create your tests here.
 class ArticleTestCase(TestCase):
@@ -51,3 +52,15 @@ class ArticleTestCase(TestCase):
         for obj in qs:
             slugified_title = slugify(obj.title)
             self.assertNotEqual(obj.slug, slugified_title)
+
+    
+    def test_slugify_instance_title(self):
+        obj = Article.objects.all().last()
+        new_slugs = []
+
+        for i in range(0, 5):
+            instance = slugify_instance_title(obj, save=False)
+            new_slugs.append(instance.slug)
+
+        unique_slugs = list(set(new_slugs))
+        self.assertEqual(len(new_slugs), len(unique_slugs))
