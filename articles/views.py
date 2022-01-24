@@ -1,4 +1,6 @@
+from signal import raise_signal
 from django.shortcuts import render
+from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from .forms import ArticleForm, ArticleModelForm
 from .models import Article
@@ -74,8 +76,14 @@ def article_detail_view(request, slug=None):
     article_obj = None
 
     if slug is not None:
-        article_obj = Article.objects.get(slug=slug)
-
+        try:
+            article_obj = Article.objects.get(slug=slug)
+        except Article.DoesNotExist:
+            raise Http404
+        except Article.MultipleObjectsReturned:
+            article_obj = Article.objects.filter(slug=slug).first()
+        except:
+            raise Http404
     context = {
         "object": article_obj
     }
