@@ -12,17 +12,9 @@ def article_search_view(request):
     @param request:
     @return: Render search.html
     """
-
     # Get the query
     query = request.GET.get('q')
-
-    qs = Article.objects.all()
-
-    # Search with Q Lookups
-    if query is not None:
-        # Search by title and contains
-        lookups = Q(title__icontains=query) | Q(content__icontains=query)
-        qs = Article.objects.filter(lookups)
+    qs = Article.objects.search(query)
     context = {
         "object_list": qs
     }
