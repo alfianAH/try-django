@@ -12,7 +12,7 @@ class ArticleTestCase(TestCase):
         """
         self.number_of_articles = 500
         for i in range(self.number_of_articles):
-            Article.objects.create(title='Hello world', content='Hello')
+            Article.objects.create(title='Hello world', content='something')
     
 
     def test_queryset_exists(self):
@@ -81,3 +81,20 @@ class ArticleTestCase(TestCase):
         # Remove the same slug by make it to set
         unique_slug_list = list(set(slug_list))
         self.assertEqual(len(slug_list), len(unique_slug_list))
+
+    
+    def test_article_search_manager(self):
+        """
+        Test Search manager by title and content
+        """
+        # Search by title
+        qs = Article.objects.search('hello world')
+        self.assertEqual(qs.count(), self.number_of_articles)
+
+        # Search by some words of title
+        qs = Article.objects.search('hello')
+        self.assertEqual(qs.count(), self.number_of_articles)
+        
+        # Search by content
+        qs = Article.objects.search('something')
+        self.assertEqual(qs.count(), self.number_of_articles)
