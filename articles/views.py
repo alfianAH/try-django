@@ -1,5 +1,5 @@
-from signal import raise_signal
 from django.shortcuts import redirect, render
+from django.db.models import Q
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from .forms import ArticleForm, ArticleModelForm
@@ -13,24 +13,18 @@ def article_search_view(request):
     @return: Render search.html
     """
 
-    # Get the input dictionary
-    query_dict = request.GET
+    # Get the query
+    query = request.GET.get('q')
 
-    # Parse the query dictionary
-    try:
-        # Search by id
-        query = int(query_dict.get("q"))
-    except:
-        query = None
+    qs = Article.objects.all()
 
-    article_obj = None
-
+    # Search with Q Lookups
     if query is not None:
-        # Get the article by id
-        article_obj = Article.objects.get(id=query)
-
+        # Search by title and contains
+        lookups = Q(title__icontains=query) | Q(content__icontains=query)
+        qs = Article.objects.filter(lookups)
     context = {
-        "object": article_obj
+        "object_list": qs
     }
 
     return render(request, "articles/search.html", context=context)
