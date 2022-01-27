@@ -1,8 +1,10 @@
 from unicodedata import name
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 from .models import Recipe, RecipeIngredient
+from .validators import validate_unit_of_measure
 
 # Create your tests here.
 User = get_user_model()
@@ -134,3 +136,35 @@ class RecipeTestCase(TestCase):
         ids = list(user.recipe_set.all().values_list('id', flat=True))
         qs = RecipeIngredient.objects.filter(recipe__id__in=ids)
         self.assertEqual(qs.count(), 1)
+
+    
+    def test_unit_measure_validation_invalid(self):
+        """
+        Test unit measure validation for invalid input
+        Expected value: Raise Validation Error
+        """
+        invalid_units = ['adfad', 'adfadf']
+
+        # Check if it raises validation error
+        with self.assertRaises(ValidationError):
+            for unit in invalid_units:
+                ingredient = RecipeIngredient(
+                    name='Bebek', quantity='1/2', unit=unit,
+                    recipe=self.recipe_b
+                )
+
+                ingredient.full_clean()
+
+    def test_unit_measure_validation_valid(self):
+        """
+        Test unit measure validation for valid input
+        Expected value: Success
+        """
+        valid_unit = 'kg'
+
+        ingredient = RecipeIngredient(
+            name='Bebek', quantity='1/2', unit=valid_unit,
+            recipe=self.recipe_b
+        )
+
+        ingredient.full_clean()
