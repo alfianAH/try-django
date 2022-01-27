@@ -29,6 +29,7 @@ class RecipeTestCase(TestCase):
             - Recipe A: Ayam geprek
                 - Ingredient A: Ayam
             - Recipe B: Bebek Kerenyes
+                - Ingredient B: Bebek
         """
         self.user_a = User.objects.create_user('alfian', password='abc12345')
         self.recipe_a = Recipe.objects.create(
@@ -44,6 +45,13 @@ class RecipeTestCase(TestCase):
             recipe=self.recipe_a,
             name='Ayam',
             quantity='1/2',
+            unit='kg'
+        )
+
+        self.recipe_ingredient_b = RecipeIngredient.objects.create(
+            recipe=self.recipe_b,
+            name='Bebek',
+            quantity='adaa',
             unit='kg'
         )
 
@@ -81,7 +89,7 @@ class RecipeTestCase(TestCase):
 
     def test_recipe_ingredient_reverse_count(self):
         """
-        Check recipe ingredient via recipe
+        Check recipe ingredient via recipe A
         Expected value: 1 (Ingredient A)
         """
         recipe = self.recipe_a
@@ -91,7 +99,7 @@ class RecipeTestCase(TestCase):
     
     def test_recipe_ingredient_forward_count(self):
         """
-        Check recipe ingredient via recipe database
+        Check recipe ingredient via recipe A database
         Expected value: 1 (Ingredient A)
         """
         recipe = self.recipe_a
@@ -102,18 +110,18 @@ class RecipeTestCase(TestCase):
     def test_user_two_level_relation(self):
         """
         Check recipe ingredient via ingredient's database
-        Expected value: 1 (Ingredient A)
+        Expected value: 2 (Ingredient A & B)
         RecipeIngredient > recipe > user
         """
         user = self.user_a
         qs = RecipeIngredient.objects.filter(recipe__user=user)
-        self.assertEqual(qs.count(), 1)
+        self.assertEqual(qs.count(), 2)
 
 
     def test_user_two_level_relation_reverse(self):
         """
         Check recipe ingredient via ingredient
-        Expected value: 1 (Ingredient A)
+        Expected value: 2 (Ingredient A & B)
         ids = recipe > recipe ingredient > id
         qs = recipe ingredient > id
         """
@@ -121,13 +129,13 @@ class RecipeTestCase(TestCase):
         # Get query sets of recipe ingredients' id
         recipe_ingreedient_ids = list(user.recipe_set.all().values_list('recipeingredient__id', flat=True))
         qs = RecipeIngredient.objects.filter(id__in=recipe_ingreedient_ids)
-        self.assertEqual(qs.count(), 1)
+        self.assertEqual(qs.count(), 2)
 
     
     def test_user_two_level_relation_reverse_via_recipe(self):
         """
         Check recipe ingredient via recipe
-        Expected value: 1 (Ingredient A)
+        Expected value: 2 (Ingredient A & B)
         ids = recipe > id
         qs = recipe ingredient > recipe > id 
         """
@@ -135,7 +143,7 @@ class RecipeTestCase(TestCase):
         # Get query sets of recipe's id
         ids = list(user.recipe_set.all().values_list('id', flat=True))
         qs = RecipeIngredient.objects.filter(recipe__id__in=ids)
-        self.assertEqual(qs.count(), 1)
+        self.assertEqual(qs.count(), 2)
 
     
     def test_unit_measure_validation_invalid(self):
@@ -168,3 +176,13 @@ class RecipeTestCase(TestCase):
         )
 
         ingredient.full_clean()
+
+    
+    def test_quantity_as_float(self):
+        """
+        Test quantity as float is none or not
+        Expected value: Ingredient A (valid): not none
+            Ingredient B (invalid): none
+        """
+        self.assertIsNotNone(self.recipe_ingredient_a.quantity_as_float)
+        self.assertIsNone(self.recipe_ingredient_b.quantity_as_float)
