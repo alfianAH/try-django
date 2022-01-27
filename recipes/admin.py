@@ -9,7 +9,7 @@ class RecipeIngredientInline(admin.StackedInline):
     """
 
     model = RecipeIngredient
-    readonly_fields = ['quantity_as_float']
+    readonly_fields = ['quantity_as_float', 'as_mks', 'as_imperial']
     extra = 0
 
 

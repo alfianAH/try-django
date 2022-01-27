@@ -1,3 +1,4 @@
+import pint
 from django.db import models
 from django.conf import settings
 
@@ -39,6 +40,38 @@ class RecipeIngredient(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
+
+
+    def convert_to_system(self, system='mks'):
+        """
+        Convert system in pint for measurement and combine the quantity and the unit
+        """
+        # Return directly if quantity as float is none
+        if self.quantity_as_float is None:
+            return None
+        
+        ureg = pint.UnitRegistry(system=system)
+        # Combine the quantity and the unit
+        measurement  = self.quantity_as_float * ureg[self.unit]
+
+        return measurement
+
+
+    def as_mks(self):
+        """
+        In mks => meter, kilogram, second
+        """
+        measurement = self.convert_to_system(system='mks')
+        return measurement.to_base_units()
+
+
+    def as_imperial(self):
+        """
+        In imperial => miles, pounds, seconds
+        """
+        measurement = self.convert_to_system(system='imperial')
+        return measurement.to_base_units()
+
 
     def save(self, *args, **kwargs):
         # Change quantity from string to float
