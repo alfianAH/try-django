@@ -49,7 +49,7 @@ def recipe_create_view(request):
         'form': form
     }
 
-    if form.is_valid:
+    if form.is_valid():
         obj = form.save(commit=False)
         obj.user = request.user
         obj.save()
@@ -69,11 +69,11 @@ def recipe_update_view(request, id=None):
     obj = get_object_or_404(Recipe, id=id, user=request.user)
     form = RecipeForm(request.POST or None, instance=obj)
     context = {
-        'object': obj,
         'form': form,
+        'object': obj,
     }
 
-    if form.is_valid:
+    if form.is_valid():
         form.save()
         context['message'] = 'Data saved.'
 

@@ -8,9 +8,9 @@
 <p>Article list</p>
 <ul>
     {% for article in object_list %}
-        <li>
-            <a href="{{ article.get_absolute_url }}">{{ article.title }} - {{ article.content }}</a>
-        </li>
+        {% if article.title %}
+            <li><a href="{{ article.get_absolute_url }}">{{ article.title }} - {{ article.content }}</a></li>
+        {% endif %}
     {% endfor %}
 </ul>
 
