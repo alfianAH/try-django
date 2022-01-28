@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<a href="{% url 'article-create' %}">Create article</a>
-<a href="{% url 'article-detail' slug='hello-world' %}">Highlight hello world</a>
+<a href="{% url 'articles:create' %}">Create article</a>
+<a href="{% url 'articles:detail' slug='hello-world' %}">Highlight hello world</a>
 
 <p>Article list</p>
 <ul>

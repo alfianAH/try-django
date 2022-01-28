@@ -10,6 +10,7 @@ from .models import Recipe
 def recipe_list_view(request):
     """
     Recipe list view that user write
+    @param: request
     """
     qs = Recipe.objects.filter(user=request.user)
     context = {
@@ -38,6 +39,11 @@ def recipe_detail_view(request, id=None):
 
 @login_required
 def recipe_create_view(request):
+    """
+    Recipe create view
+    @param: request
+    @param: id: Recipe's id
+    """
     form = RecipeForm(request.POST or None)
     context = {
         'form': form
@@ -54,7 +60,12 @@ def recipe_create_view(request):
 
 
 @login_required
-def recipe_create_view(request, id = None):
+def recipe_update_view(request, id=None):
+    """
+    Recipe update view
+    @param: request
+    @param: id: Recipe's id
+    """
     obj = get_object_or_404(Recipe, id=id, user=request.user)
     form = RecipeForm(request.POST or None, instance=obj)
     context = {
