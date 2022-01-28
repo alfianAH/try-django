@@ -1,5 +1,5 @@
-from django.urls import reverse
 import pint
+from django.urls import reverse
 from django.db import models
 from django.conf import settings
 
