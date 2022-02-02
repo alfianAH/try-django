@@ -20,6 +20,8 @@ class RecipeForm(forms.ModelForm):
                 'class': 'form-control'
             })
 
+        self.fields['name'].help_text = 'This is your help <a href="/contact">Contact us</a>'
+
         self.fields['description'].widget.attrs.update({
             'rows': 2,
         })
