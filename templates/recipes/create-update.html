@@ -6,6 +6,9 @@
     .ingredient-form {
         border-bottom: 1px solid black;
     }
+    .hidden{
+        display: none;
+    }
 </style>
 
 {% if message %}
@@ -30,15 +33,53 @@
     {% if formset %}
         <h2>Ingredients</h2>
         {{ formset.management_form }}
-        {% for form in formset %}
-            <div class='ingredient-form'>
-                {{ form.as_p }}
-            </div>
-        {% endfor %}
+        <div id="ingredient-form-list">
+            {% for form in formset %}
+                <div class='ingredient-form'>
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id='empty-form' class='hidden'>{{ formset.empty_form.as_p }}</div>
+        <button id='add-more' type='button' on>Add more</button>
     {% endif %}
     
     <button style="margin-top:30px" type="submit">Save</button>
     </form>
 </div>
+
+<script>
+    const addMoreButton = document.getElementById('add-more');
+    const totalNewForm = document.getElementById('id_form-TOTAL_FORMS');
+
+    addMoreButton.addEventListener('click', addNewForm);
+
+    function addNewForm(event){
+        if(event){
+            // To prevent submit type in button
+            event.preventDefault();
+        }
+        
+        const currentIngredientForms = document.getElementsByClassName('ingredient-form');
+        const currentFormCount = currentIngredientForms.length;
+
+        const formCopyTarget = document.getElementById('ingredient-form-list');
+        const newEmptyFormElement = document.getElementById('empty-form').cloneNode(true);
+        // Change the class from hidden to ingredient-form
+        newEmptyFormElement.setAttribute('class', 'ingredient-form');
+        // Make the new form's fields empty
+        newEmptyFormElement.setAttribute('id', `form-${currentFormCount}`);
+        
+        // Change __prefix__ to current form count
+        const regex = new RegExp('__prefix__', 'g');
+        newEmptyFormElement.innerHTML = newEmptyFormElement.innerHTML.replace(regex, currentFormCount);
+        
+        // Update value in total new form in form management
+        totalNewForm.setAttribute('value', currentFormCount + 1);
+
+        formCopyTarget.append(newEmptyFormElement);
+    }
+</script>
 
 {% endblock content %}

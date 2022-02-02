@@ -85,6 +85,9 @@ def recipe_update_view(request, id=None):
         'object': obj,
     }
 
+    if request.method == 'POST':
+        print(request.POST)
+
     # If all forms are valid
     if all([form.is_valid(), formset.is_valid()]):
         parent = form.save(commit=False)
@@ -93,8 +96,7 @@ def recipe_update_view(request, id=None):
         # Check all ingredient form in formset
         for ingredient_form in formset:
             child = ingredient_form.save(commit=False)
-            if not hasattr(child, 'recipe'):
-                child.recipe = parent
+            child.recipe = parent
             child.save()
         
         context['message'] = 'Data saved.'
