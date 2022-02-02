@@ -40,10 +40,13 @@ def recipe_detail_view(request, id=None):
 
 @login_required
 def recipe_create_view(request):
-    """
-    Recipe create view
-    @param: request
-    @param: id: Recipe's id
+    """Recipe create view
+
+    Args:
+        request (Any): 
+
+    Returns:
+        Any: Render for create-update.html
     """
     form = RecipeForm(request.POST or None)
     context = {
@@ -67,6 +70,7 @@ def recipe_update_view(request, id=None):
     @param: request
     @param: id: Recipe's id
     """
+    
     obj = get_object_or_404(Recipe, id=id, user=request.user)
     form = RecipeForm(request.POST or None, instance=obj)
     # Make formset for recipe ingredient
