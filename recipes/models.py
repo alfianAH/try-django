@@ -1,6 +1,7 @@
 import pint
 from django.urls import reverse
 from django.db import models
+from django.db.models import Q
 from django.conf import settings
 
 from .utils import number_str_to_float
@@ -19,6 +20,41 @@ from.validators import validate_unit_of_measure
         - Directions for Ingredients
 """
 
+User = settings.AUTH_USER_MODEL
+
+
+class RecipeQuerySet(models.QuerySet):
+    """
+    Custom query set class
+    """
+
+    def search(self, query=None):
+        # Return if query is none or empty
+        if query is None or query == '':
+            return self.none()
+        
+        # Search by title and content
+        lookups = (
+            Q(name__icontains=query) | 
+            Q(description__icontains=query) | 
+            Q(directions__icontains=query)
+        )
+
+        return self.filter(lookups)
+
+
+class RecipeManager(models.Manager):
+    """
+    Recipe model manager
+    """
+    
+    def get_queryset(self):
+        return RecipeQuerySet(self.model, using=self._db)
+    
+    def search(self, query=None):
+        return self.get_queryset().search(query=query)
+
+
 class Recipe(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=220)
@@ -28,6 +64,11 @@ class Recipe(models.Model):
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
+    objects = RecipeManager()
+
+    @property
+    def title(self):
+        return self.name
 
     def get_absolute_url(self):
         return reverse('recipes:detail', kwargs={'id': self.id})

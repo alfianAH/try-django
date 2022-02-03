@@ -22,11 +22,13 @@ from accounts.views import (
     logout_view,
     register_view
 )
+from search.views import search_view
 
 urlpatterns = [
     path('', home_view),
     path('pantry/recipes/', include('recipes.urls')),
     path('articles/', include('articles.urls')),
+    path('search/', search_view, name='search'),
     path('admin/', admin.site.urls),
     path('home/', home_view),
     path('login/', login_view),
