@@ -1,4 +1,4 @@
-<form action="." method="post" hx-post='.' hx-swap='outerHTML'>
+<form action="." method="post" hx-post='.' hx-swap='outerHTML' hx-trigger='{% if form.instance.id %} change delay:500ms, {% endif %} submit'>
     {% csrf_token %}
 
     {% for field in form %}

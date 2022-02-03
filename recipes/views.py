@@ -83,7 +83,15 @@ def recipe_create_view(request):
         obj = form.save(commit=False)
         obj.user = request.user
         obj.save()
-    
+
+        # If request is HTMX, redirect it to absolute URL via hx-redirect
+        if request.htmx:
+            headers = {
+                'hx-redirect': obj.get_absolute_url()
+            }
+            return HttpResponse('Created', headers=headers)
+        
+        # Normal redirect
         return redirect(obj.get_absolute_url())
 
     return render(request, "recipes/create-update.html", context)
