@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.forms import modelformset_factory  # model form for queryset
 from django.shortcuts import redirect, render, get_object_or_404
-
+from django.http import HttpResponse
+from django.urls import reverse
 from .forms import RecipeForm, RecipeIngredientForm
 from .models import Recipe, RecipeIngredient
 
@@ -28,14 +29,34 @@ def recipe_detail_view(request, id=None):
     @param: request
     @param: id: Recipe id
     """
-    # Use get_object_or_404 if use unique key
-    # If not use other method to get object (Example: article_detail_view())
-    obj = get_object_or_404(Recipe, id=id, user=request.user)
+    hx_url = reverse('recipes:hx-detail', kwargs={'id': id})
+    context = {
+        'hx_url': hx_url
+    }
+
+    return render(request, "recipes/detail.html", context)
+
+
+@login_required
+def recipe_detail_hx_view(request, id=None):
+    """
+    Recipe detail view
+    @param: request
+    @param: id: Recipe id
+    """
+    try:
+        obj = Recipe.objects.get(id=id, user=request.user)
+    except:
+        obj = None
+
+    if obj is None:
+        return HttpResponse('Not found')
+    
     context = {
         'object': obj
     }
 
-    return render(request, "recipes/detail.html", context)
+    return render(request, "recipes/partials/detail.html", context)
 
 
 @login_required
