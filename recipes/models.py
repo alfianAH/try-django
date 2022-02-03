@@ -41,6 +41,9 @@ class Recipe(models.Model):
     def get_ingredients(self):
         return self.recipeingredient_set.all()
 
+    def get_create_ingredient_hx_url(self):
+        return reverse('recipes:hx-ingredient-create', kwargs={'parent_id': self.id})
+
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
@@ -57,6 +60,12 @@ class RecipeIngredient(models.Model):
 
     def get_absolute_url(self):
         return self.recipe.get_absolute_url()
+
+    def get_hx_edit_url(self):
+        return reverse('recipes:hx-ingredient-update', kwargs={
+            'parent_id': self.recipe.id,
+            'id': self.id
+        })
 
     def convert_to_system(self, system='mks'):
         """

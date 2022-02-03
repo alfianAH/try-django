@@ -11,21 +11,6 @@
             {% endif %}
         </div>
     {% endfor %}
-
-    {% if formset %}
-        <h2>Ingredients</h2>
-        {{ formset.management_form }}
-        <div id="ingredient-form-list">
-            {% for form in formset %}
-                <div class='ingredient-form'>
-                    {{ form.as_p }}
-                </div>
-            {% endfor %}
-        </div>
-
-        <div id='empty-form' class='hidden'>{{ formset.empty_form.as_p }}</div>
-        <button id='add-more' type='button'>Add more</button>
-    {% endif %}
     
     <div class='htmx-indicator'>Loading...</div>
     <button class='htmx-inverted-indicator' style="margin-top:30px" type="submit">Save</button>
