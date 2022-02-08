@@ -1,4 +1,7 @@
+import pathlib
+import uuid
 from fractions import Fraction
+
 
 def number_str_to_float(amount_str):
     """
@@ -26,3 +29,18 @@ def number_str_to_float(amount_str):
     if isinstance(number_as_float, float):
         success = True
     return number_as_float, success
+
+
+def recipe_ingredient_image_upload_handler(instance, filename):
+    """Change file name of recipe ingredient
+
+    Args:
+        instance (class): 
+        filename (str): file's name
+
+    Returns:
+        str: Path to file and new file name with unique name
+    """
+    fpath = pathlib.Path(filename)
+    new_fname = str(uuid.uuid1())
+    return 'recipes/{}.{}'.format(new_fname, fpath.suffix)

@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models import Q
 from django.conf import settings
 
-from .utils import number_str_to_float
+from .utils import number_str_to_float, recipe_ingredient_image_upload_handler
 from.validators import validate_unit_of_measure
 
 # Create your models here.
@@ -87,6 +87,13 @@ class Recipe(models.Model):
 
     def get_create_ingredient_hx_url(self):
         return reverse('recipes:hx-ingredient-create', kwargs={'parent_id': self.id})
+
+
+class RecipeIngredientImage(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    # image
+    image = models.ImageField(upload_to=recipe_ingredient_image_upload_handler)
+    # extracted_text
 
 
 class RecipeIngredient(models.Model):
