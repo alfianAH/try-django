@@ -3,7 +3,7 @@ from django.forms import modelformset_factory  # model form for queryset
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import Http404, HttpResponse
 from django.urls import reverse
-from .forms import RecipeForm, RecipeIngredientForm
+from .forms import RecipeForm, RecipeIngredientForm, RecipeIngredientImageForm
 from .models import Recipe, RecipeIngredient
 
 # Create your views here.
@@ -253,3 +253,39 @@ def recipe_ingredient_update_hx_view(request, parent_id=None, id=None):
 
     # Render form
     return render(request, "recipes/partials/ingredient-form.html", context)
+
+
+@login_required
+def recipe_ingredient_image_upload_view(request, parent_id=None):
+    """Recipe ingredient image upload view
+
+    Args:
+        request (): 
+        parent_id (int, optional): Recipe's id. Defaults to None.
+
+    Raises:
+        Http404: 404 page
+
+    Returns:
+        any: Render image-form.html
+    """
+    form = RecipeIngredientImageForm(request.POST or None, request.FILES or None)
+
+    # Get the recipe
+    try:
+        parent_obj = Recipe.objects.get(id=parent_id, user=request.user)
+    except:
+        parent_obj = None
+    
+    if parent_obj is None:
+        raise Http404
+    
+    if form.is_valid():
+        obj = form.save(commit=False)
+        obj.recipe = parent_obj
+        obj.save()
+    
+    context = {
+        'form': form
+    }
+    return render(request, 'image-form.html', context)
