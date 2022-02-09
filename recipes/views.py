@@ -269,7 +269,10 @@ def recipe_ingredient_image_upload_view(request, parent_id=None):
     Returns:
         any: Render image-form.html
     """
-    form = RecipeIngredientImageForm(request.POST or None, request.FILES or None)
+    template_name = 'recipes/image-upload.html'
+
+    if request.htmx:
+        template_name = 'recipes/partials/image-upload-form.html'
 
     # Get the recipe
     try:
@@ -279,6 +282,8 @@ def recipe_ingredient_image_upload_view(request, parent_id=None):
     
     if parent_obj is None:
         raise Http404
+
+    form = RecipeIngredientImageForm(request.POST or None, request.FILES or None)
     
     if form.is_valid():
         obj = form.save(commit=False)
@@ -288,4 +293,4 @@ def recipe_ingredient_image_upload_view(request, parent_id=None):
     context = {
         'form': form
     }
-    return render(request, 'image-form.html', context)
+    return render(request, template_name, context)
