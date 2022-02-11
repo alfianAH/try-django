@@ -26,7 +26,7 @@ urlpatterns = [
     # Ingredient delete
     path('<int:parent_id>/ingredient/<int:id>/delete/', recipe_ingredient_delete_view, name='ingredient-delete'),
     # Ingredient image
-    path('<int:parent_id>/image-upload/', recipe_ingredient_image_upload_view),
+    path('<int:parent_id>/image-upload/', recipe_ingredient_image_upload_view, name='ingredient-image-upload'),
     # Recipe delete
     path('<int:id>/delete/', recipe_delete_view, name='delete'),
     # Recipe update

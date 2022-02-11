@@ -42,3 +42,6 @@ class RecipeIngredientImageForm(forms.ModelForm):
     class Meta:
         model = RecipeIngredientImage
         fields = ['image']
+        labels = {
+            "image": 'Extract via image upload'
+        }

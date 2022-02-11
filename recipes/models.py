@@ -88,6 +88,8 @@ class Recipe(models.Model):
     def get_create_ingredient_hx_url(self):
         return reverse('recipes:hx-ingredient-create', kwargs={'parent_id': self.id})
 
+    def get_image_upload_url(self):
+        return reverse('recipes:ingredient-image-upload', kwargs={'parent_id': self.id})
 
 class RecipeIngredientImage(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)

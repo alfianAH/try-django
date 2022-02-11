@@ -17,6 +17,8 @@
 
 <div style="margin-top:30px">
     {% include 'recipes/partials/forms.html' %}
+    
+    <div hx-get='{{ object.get_image_upload_url }}' hx-trigger='revealed'></div>
 
     <h3>Ingredients</h3>
     {% for ingredient in object.get_ingredients %}

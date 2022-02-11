@@ -289,6 +289,14 @@ def recipe_ingredient_image_upload_view(request, parent_id=None):
         obj = form.save(commit=False)
         obj.recipe = parent_obj
         obj.save()
+
+        success_url = parent_obj.get_edit_url()
+        if request.htmx:
+            headers = {
+                'hx-redirect': success_url
+            }
+            return HttpResponse("Success", headers=headers)
+        return redirect(success_url)
     
     context = {
         'form': form
