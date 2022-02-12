@@ -130,9 +130,12 @@ def recipe_detail_hx_view(request, id=None):
 
     if obj is None:
         return HttpResponse('Not found')
+
+    new_ingredient_url = reverse('recipes:hx-ingredient-create', kwargs={'parent_id': obj.id})
     
     context = {
-        'object': obj
+        'object': obj,
+        'new_ingredient_url': new_ingredient_url
     }
 
     return render(request, "recipes/partials/detail.html", context)

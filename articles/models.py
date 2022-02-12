@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
 from .utils import slugify_instance_title
+# from meals.utils import generate_meal_queue_totals
 
 
 User = settings.AUTH_USER_MODEL
@@ -73,3 +74,17 @@ def article_post_save(sender, instance, created, *args, **kwargs):
 
 pre_save.connect(article_pre_save, sender=Article)
 post_save.connect(article_post_save, sender=Article)
+
+
+# def meal_added_receiver(sender, instance, *args, **kwargs):
+#     print('Added', args, kwargs)
+#     user = instance.user
+#     data = generate_meal_queue_totals(user)
+#     print(data)
+
+# def meal_removed_receiver(*args, **kwargs):
+#     print('Removed', args, kwargs)
+
+
+# meal_added.connect(meal_added_receiver)
+# meal_removed.connect(meal_removed_receiver)
