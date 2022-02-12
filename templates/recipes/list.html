@@ -3,11 +3,13 @@
 {% block content %}
 <h1>My Recipes</h1>
 
-<a href="{% url 'recipes:create' %}">Add Recipe</a>
-<ul>
-    {% for recipe in object_list %}
-        <li><a href="{{ recipe.get_absolute_url }}">{{ recipe.name }}</a></li>
-    {% endfor %}
-</ul>
+<h3><a href="{% url 'recipes:create' %}">Add Recipe</a></h3>
+{% for recipe in object_list %}
+    <div>
+        <a href="{{ recipe.get_absolute_url }}">{{ recipe.name }}</a>
+        <div hx-get='{% url "meal-toggle" recipe_id=recipe.id %}'
+            hx-trigger='revealed'></div>
+    </div>
+{% endfor %}
 
 {% endblock content %}
