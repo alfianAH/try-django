@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     # Internal
     'articles',
+    'meals',
     'recipes',
     'search',
 ]
