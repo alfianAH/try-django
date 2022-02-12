@@ -1,7 +1,9 @@
-<div id='ingredient-{{ object.id }}'>
+<div class='mb-2' id='ingredient-{{ object.id }}'>
     {{ object.quantity }} {{ object.unit }} - {{ object.name }}
-    <button hx-trigger='click' hx-get='{{ object.get_hx_edit_url }}' hx-target='#ingredient-{{ object.id }}'>Edit</button>
-    <button hx-post='{{ object.get_delete_url }}'
+    <button class="btn btn-outline-success" hx-trigger='click' 
+        hx-get='{{ object.get_hx_edit_url }}' 
+        hx-target='#ingredient-{{ object.id }}'>Edit</button>
+    <button class="btn btn-outline-danger" hx-post='{{ object.get_delete_url }}'
         hx-confirm='Are you sure you want to delete {{ object.name }}?' 
         hx-trigger='click' hx-target='#ingredient-{{ object.id }}' hx-swap='outerHTML'>Delete</button>
 </div>

@@ -3,12 +3,13 @@
 {% block content %}
 
 {% if not request.user.is_authenticated %}
-    <div style="margin-top:30px">
+    <h1>Register</h1>  
+    <div>
         <form method="post">
             {% csrf_token %}
 
             {{ form.as_p }}
-            <button type="submit">Register</button>
+            <button class="btn btn-outline-success" type="submit">Register</button>
         </form>
 
         <p>Already have an account? Please <a href="/login/">login</a></p>

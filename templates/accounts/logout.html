@@ -3,12 +3,12 @@
 {% block content %}
 
 {% if request.user.is_authenticated %}
-    <div style="margin-top:30px">
+    <div>
         <form method="post">
             {% csrf_token %}
 
             <p>Are you sure you want to logout?</p>
-            <button type="submit">Yes, logout</button>
+            <button class="btn btn-outline-danger" type="submit">Yes, logout</button>
         </form>
     </div>
 {% else %}
